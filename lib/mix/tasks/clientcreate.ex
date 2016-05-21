@@ -20,6 +20,7 @@ defmodule Mix.Tasks.Oauth2Server.Clientcreate do
     args |> get_options |> create_client
   end
 
+  # converts options to map
   defp get_options(args) do
     options = OptionParser.parse(args)
     options = Tuple.to_list(options)
@@ -35,6 +36,7 @@ defmodule Mix.Tasks.Oauth2Server.Clientcreate do
     end
   end
 
+  # create oauth client
   defp create_client(options) do
 
     random_id = :crypto.strong_rand_bytes(40) |> Base.url_encode64 |> binary_part(0, 40)
@@ -43,7 +45,7 @@ defmodule Mix.Tasks.Oauth2Server.Clientcreate do
 
     params = %{random_id: random_id, secret: secret, allowed_grant_types: allowed_grant_types}
 
-    changeset = OauthClient.changeset(%OauthClient{}, params)
+    changeset = OauthClient.changeset(%OauthClient{})
 
     Repo.start_link
     case Repo.insert(changeset) do

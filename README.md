@@ -1,6 +1,4 @@
 
-**TODO: Add description**
-
 ## Installation
 
 Oauth2 Server for Phoenix Framework

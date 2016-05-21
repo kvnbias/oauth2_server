@@ -18,13 +18,14 @@ defmodule Oauth2Server.Mixfile do
   end
 
   def application do
-    [applications: [:logger, :ecto]]
+    [applications: [:logger, :ecto, :comeonin]]
   end
 
   defp deps do
     [
       {:ecto, "~> 1.1.2"},
       {:poison, "~> 1.5 or ~> 2.0"},
+      {:comeonin, "~> 2.4"},
     ]
   end
 
