@@ -100,7 +100,7 @@ NOTE : Available grant_types as of now are password, refresh_token, client_crede
   $ mix oauth2_server.clientcreate --password --refresh-token --client-credentials
 ```
 
-Creating access_token (parameters)
+### Creating access_token (parameters)
 
 ```elixir
   client_id : string
@@ -110,7 +110,7 @@ Creating access_token (parameters)
   password : password
 ```
 
-Refreshing the access_token (parameters)
+### Refreshing the access_token (parameters)
 
 ```elixir
   client_id : string
@@ -118,7 +118,7 @@ Refreshing the access_token (parameters)
   grant_type : refresh_token
 ```
 
-Parameters for client_credentials (parameters)
+### Parameters for client_credentials (parameters)
 
 ```elixir
   client_id : string
