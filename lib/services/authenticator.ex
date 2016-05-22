@@ -21,6 +21,8 @@ defmodule Oauth2Server.Authenticator do
               process_password_grant(params, oauth_client)
             "refresh_token" ->
               process_refresh_token_grant(params["refresh_token"], oauth_client)
+            "client_credentials" ->
+              process_client_credentials_grant(oauth_client)
             nil ->
               %{message: "Invalid oauth credentials", code: 400}
           end
@@ -30,6 +32,15 @@ defmodule Oauth2Server.Authenticator do
       end
     else
       %{message: "Invalid oauth credentials", code: 400}
+    end
+  end
+
+  defp process_client_credentials_grant(oauth_client) do
+    case generate_client_credentials_grant(oauth_client) do
+      {:ok, resp} ->
+        resp
+      :error ->
+        %{message: "Invalid login credentials", code: 400}
     end
   end
 
@@ -57,6 +68,22 @@ defmodule Oauth2Server.Authenticator do
     else
       %{message: "Invalid login credentials", code: 400}
     end
+  end
+
+  def generate_client_credentials_grant(oauth_client) do
+    Repo.transaction(fn ->
+      case generate_access_token(oauth_client, nil) do
+        {:ok, oauth_access_token} ->
+          case generate_refresh_token(oauth_client, oauth_access_token, nil) do
+            {:ok, oauth_refresh_token} ->
+              %{code: 200, access_token: oauth_access_token.token, refresh_token: oauth_refresh_token.token, expires_at: oauth_access_token.expires_at}
+            :error -> 
+              %{message: "An error has occured. Please try again later", code: 400}
+          end
+        :error -> 
+          %{message: "An error has occured. Please try again later", code: 400}
+      end
+    end)
   end
 
   def generate_refresh_token_grant(token, oauth_client) do
@@ -113,7 +140,11 @@ defmodule Oauth2Server.Authenticator do
     access_token_expiration = :os.system_time(:seconds) + settings[:access_token_expiration]
     token = :crypto.strong_rand_bytes(40) |> Base.url_encode64 |> binary_part(0, 40)
 
-    params = %{oauth_client_id: oauth_client.id, user_id: user.id, token: token, expires_at: access_token_expiration}
+    params = case user do
+      nil -> %{oauth_client_id: oauth_client.id, token: token, expires_at: access_token_expiration}
+      _ -> %{oauth_client_id: oauth_client.id, user_id: user.id, token: token, expires_at: access_token_expiration}
+    end
+    
     changeset = OauthAccessToken.changeset(%OauthAccessToken{}, params)
 
     case Repo.insert(changeset) do
@@ -129,7 +160,11 @@ defmodule Oauth2Server.Authenticator do
     refresh_token_expiration = access_token.expires_at + settings[:refresh_token_expiration]
     token = :crypto.strong_rand_bytes(40) |> Base.url_encode64 |> binary_part(0, 40)
 
-    params = %{oauth_client_id: oauth_client.id, user_id: user.id, token: token, expires_at: refresh_token_expiration, is_delete: 0}
+    params = case user do
+      nil -> %{oauth_client_id: oauth_client.id, token: token, expires_at: refresh_token_expiration, is_delete: 0}
+      _ -> %{oauth_client_id: oauth_client.id, user_id: user.id, token: token, expires_at: refresh_token_expiration, is_delete: 0}
+    end
+    
     changeset = OauthRefreshToken.changeset(%OauthRefreshToken{}, params)
 
     case Repo.insert(changeset) do
