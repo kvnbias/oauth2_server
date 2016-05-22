@@ -1,3 +1,8 @@
 .fetch
 .hex
 
+/_build
+/cover
+/deps
+erl_crash.dump
+*.ez
