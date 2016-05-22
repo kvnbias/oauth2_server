@@ -6,6 +6,8 @@ defmodule Oauth2Server.User do
     field :email, :string
     field :password, :string
 
+    has_many :oauth_access_token, Oauth2Server.OauthAccessToken
+    has_many :oauth_refresh_token, Oauth2Server.OauthRefreshToken
     timestamps
   end
 

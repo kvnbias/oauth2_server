@@ -11,8 +11,8 @@ defmodule Oauth2Server.OauthRefreshToken do
     belongs_to :oauth_client, Oauth2Server.OauthClient
   end
 
-  @required_fields ~w(token expires_at is_delete user_id oauth_client_id)
-  @optional_fields ~w()
+  @required_fields ~w(token expires_at is_delete oauth_client_id)
+  @optional_fields ~w(user_id)
 
   def changeset(model, params \\ :empty) do
     model

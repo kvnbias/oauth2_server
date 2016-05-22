@@ -44,14 +44,13 @@ defmodule Mix.Tasks.Oauth2Server.Clientcreate do
     allowed_grant_types = to_string Poison.Encoder.encode(options, [])
 
     params = %{random_id: random_id, secret: secret, allowed_grant_types: allowed_grant_types}
-
-    changeset = OauthClient.changeset(%OauthClient{})
+    changeset = OauthClient.changeset(%OauthClient{}, params)
 
     Repo.start_link
     case Repo.insert(changeset) do
       {:ok, oauth_client} ->
-        Mix.shell.info "client_id : " <> random_id <> " secret: " <> secret
-      {:error, changeset} ->
+        Mix.shell.info "client_id : " <> oauth_client.random_id <> " secret: " <> oauth_client.secret
+      :error ->
         Mix.shell.info "Error creating oauth client"
     end
   end
