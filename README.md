@@ -17,7 +17,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
           [applications: [:oauth2_server]]
         end
 
-## Req
+## Prerequisites
 
 NOTE : Postgres & MongoDB are not yet supported
 
@@ -101,7 +101,11 @@ NOTE : Available grant_types as of now are password, refresh_token, client_crede
 ```
 
 For secured endpoints you will need to add a parameter `access_token` for your requests.
-You can fetch the user id of the token owner via : get_session(conn, :oauth2_server_user_id)
+You can fetch the user id of the token owner via : 
+
+```elixir
+get_session(conn, :oauth2_server_user_id)
+```
 
 ## License
 
