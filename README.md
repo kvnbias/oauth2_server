@@ -126,6 +126,29 @@ NOTE : Available grant_types as of now are password, refresh_token, client_crede
   grant_type : client_credentials
 ```
 
+### Sample controller login method : 
+
+```elixir
+defmodule Phoenixtrial.v1.auth.UserApiController do
+  use Phoenixtrial.Web, :controller
+
+  alias Oauth2Server.Authenticator
+
+  def login(conn, params) do
+    res = Authenticator.validate(params)
+
+    case res.code do
+      200 ->
+        json conn, %{access_token: res.access_token, refresh_token: res.refresh_token, expiration: res.expires_at}
+      400 ->
+        conn |> put_status(400) |> json(%{"message": res.message})
+      nil ->
+        conn |> put_status(400) |> json(%{"message": "Invalid oauth credentials."})
+    end
+  end
+end
+```
+
 For secured endpoints you will need to add a parameter `access_token` for your requests.
 You can fetch the user id of the token owner via : 
 

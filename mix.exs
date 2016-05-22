@@ -3,7 +3,7 @@ defmodule Oauth2Server.Mixfile do
 
   def project do
     [app: :oauth2_server,
-     version: "0.0.2",
+     version: "0.1.1",
      elixir: "~> 1.2",
      description: "An elixir Oauth 2.0 server",
      build_embedded: Mix.env == :prod,
