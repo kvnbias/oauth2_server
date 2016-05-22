@@ -100,6 +100,32 @@ NOTE : Available grant_types as of now are password, refresh_token, client_crede
   $ mix oauth2_server.clientcreate --password --refresh-token --client-credentials
 ```
 
+Creating access_token (parameters)
+
+```elixir
+  client_id : string
+  secret : string
+  grant_type : password
+  email : email
+  password : password
+```
+
+Refreshing the access_token (parameters)
+
+```elixir
+  client_id : string
+  secret : string
+  grant_type : refresh_token
+```
+
+Parameters for client_credentials (parameters)
+
+```elixir
+  client_id : string
+  secret : string
+  grant_type : client_credentials
+```
+
 For secured endpoints you will need to add a parameter `access_token` for your requests.
 You can fetch the user id of the token owner via : 
 
