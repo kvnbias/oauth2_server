@@ -116,6 +116,7 @@ NOTE : Available grant_types as of now are password, refresh_token, client_crede
   client_id : string
   secret : string
   grant_type : refresh_token
+  refresh_token : refresh_token
 ```
 
 ### Parameters for client_credentials (parameters)
