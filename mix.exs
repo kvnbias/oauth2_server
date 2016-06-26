@@ -26,6 +26,7 @@ defmodule Oauth2Server.Mixfile do
       {:ecto, "~> 1.1.2"},
       {:poison, "~> 1.5 or ~> 2.0"},
       {:comeonin, "~> 2.4"},
+      {:plug, "~> 1.1.6"}
     ]
   end
 
